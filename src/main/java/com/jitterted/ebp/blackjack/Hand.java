@@ -13,7 +13,9 @@ public class Hand {
   }
 
   public Hand(List<Card> cards) {
-    this.cards.addAll(cards);
+    for (Card card : cards) {
+      add(card);
+    }
   }
 
   public void add(Card card) {
@@ -32,7 +34,7 @@ public class Hand {
         .anyMatch(card -> card.rankValue() == 1);
 
     // if the total hand value <= 11, then count the Ace as 11 by adding 10
-    if (hasAce && handValue < 11) {
+    if (hasAce && handValue <= 11) {
       handValue += 10;
     }
 
@@ -49,5 +51,17 @@ public class Hand {
 
   public Card getCard(int index) {
     return cards.get(index);
+  }
+
+  boolean isBusted() {
+    return value() > 21;
+  }
+
+  boolean isTiedWith(Hand hand) {
+    return value() == hand.value();
+  }
+
+  boolean beats(Hand dealerHand) {
+    return value() > dealerHand.value();
   }
 }

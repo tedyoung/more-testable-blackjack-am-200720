@@ -72,15 +72,23 @@ public class Game {
   private void finalGameResults(boolean playerBusted) {
     if (playerBusted) {
       System.out.println("You Busted, so you lose.  💸");
-    } else if (dealerHand.value() > 21) {
+    } else if (dealerHand.isBusted()) {
       System.out.println("Dealer went BUST, Player wins! Yay for you!! 💵");
-    } else if (dealerHand.value() < playerHand.value()) {
+    } else if (playerBeatsDealer()) {
       System.out.println("You beat the Dealer! 💵");
-    } else if (dealerHand.value() == playerHand.value()) {
+    } else if (playerPushesWithDealer()) {
       System.out.println("Push: The house wins, you Lose. 💸");
     } else {
       System.out.println("You lost to the Dealer. 💸");
     }
+  }
+
+  private boolean playerPushesWithDealer() {
+    return playerHand.isTiedWith(dealerHand);
+  }
+
+  private boolean playerBeatsDealer() {
+    return playerHand.beats(dealerHand);
   }
 
   private void dealerPlays(boolean playerBusted) {
@@ -103,7 +111,7 @@ public class Game {
       }
       if (playerChoice.startsWith("h")) {
         playerHand.add(deck.draw());
-        if (playerHand.value() > 21) {
+        if (playerHand.isBusted()) {
           playerBusted = true;
         }
       } else {
