@@ -17,8 +17,24 @@ public class Game {
   private final List<Card> playerHand = new ArrayList<>();
 
   public static void main(String[] args) {
-    Game game = new Game();
+    showWelcomeScreen();
 
+    playGame();
+
+    resetScreen();
+  }
+
+  private static void playGame() {
+    Game game = new Game();
+    game.initialDeal();
+    game.play();
+  }
+
+  private static void resetScreen() {
+    System.out.println(ansi().reset());
+  }
+
+  private static void showWelcomeScreen() {
     System.out.println(ansi()
                            .bgBright(Ansi.Color.WHITE)
                            .eraseScreen()
@@ -26,12 +42,6 @@ public class Game {
                            .fgGreen().a("Welcome to")
                            .fgRed().a(" Jitterted's")
                            .fgBlack().a(" BlackJack"));
-
-
-    game.initialDeal();
-    game.play();
-
-    System.out.println(ansi().reset());
   }
 
   public Game() {
@@ -50,6 +60,39 @@ public class Game {
   }
 
   public void play() {
+    boolean playerBusted = playerPlays();
+
+    dealerPlays(playerBusted);
+
+    displayFinalGameState();
+
+    finalGameResults(playerBusted);
+  }
+
+  private void finalGameResults(boolean playerBusted) {
+    if (playerBusted) {
+      System.out.println("You Busted, so you lose.  💸");
+    } else if (handValueOf(dealerHand) > 21) {
+      System.out.println("Dealer went BUST, Player wins! Yay for you!! 💵");
+    } else if (handValueOf(dealerHand) < handValueOf(playerHand)) {
+      System.out.println("You beat the Dealer! 💵");
+    } else if (handValueOf(dealerHand) == handValueOf(playerHand)) {
+      System.out.println("Push: The house wins, you Lose. 💸");
+    } else {
+      System.out.println("You lost to the Dealer. 💸");
+    }
+  }
+
+  private void dealerPlays(boolean playerBusted) {
+    // Dealer makes its choice automatically based on a simple heuristic (<=16, hit, 17>stand)
+    if (!playerBusted) {
+      while (handValueOf(dealerHand) <= 16) {
+        dealerHand.add(deck.draw());
+      }
+    }
+  }
+
+  private boolean playerPlays() {
     // get Player's decision: hit until they stand, then they're done (or they go bust)
     boolean playerBusted = false;
     while (!playerBusted) {
@@ -67,27 +110,7 @@ public class Game {
         System.out.println("You need to [H]it or [S]tand");
       }
     }
-
-    // Dealer makes its choice automatically based on a simple heuristic (<=16, hit, 17>stand)
-    if (!playerBusted) {
-      while (handValueOf(dealerHand) <= 16) {
-        dealerHand.add(deck.draw());
-      }
-    }
-
-    displayFinalGameState();
-
-    if (playerBusted) {
-      System.out.println("You Busted, so you lose.  💸");
-    } else if (handValueOf(dealerHand) > 21) {
-      System.out.println("Dealer went BUST, Player wins! Yay for you!! 💵");
-    } else if (handValueOf(dealerHand) < handValueOf(playerHand)) {
-      System.out.println("You beat the Dealer! 💵");
-    } else if (handValueOf(dealerHand) == handValueOf(playerHand)) {
-      System.out.println("Push: The house wins, you Lose. 💸");
-    } else {
-      System.out.println("You lost to the Dealer. 💸");
-    }
+    return playerBusted;
   }
 
   public int handValueOf(List<Card> hand) {
