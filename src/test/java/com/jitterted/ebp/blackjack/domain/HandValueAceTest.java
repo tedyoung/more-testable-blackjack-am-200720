@@ -1,7 +1,7 @@
 package com.jitterted.ebp.blackjack.domain;
 
 import com.jitterted.ebp.blackjack.Card;
-import com.jitterted.ebp.blackjack.Game;
+import com.jitterted.ebp.blackjack.Hand;
 import com.jitterted.ebp.blackjack.Suit;
 import org.junit.jupiter.api.Test;
 
@@ -15,22 +15,25 @@ public class HandValueAceTest {
 
   @Test
   public void handWithOneAceTwoCardsIsValuedAt11() throws Exception {
-    Game game = new Game();
-    var hand = List.of(new Card(ARBITRARY_SUIT, "A"),
-                       new Card(ARBITRARY_SUIT, "5"));
+    var cards = List.of(new Card(ARBITRARY_SUIT, "A"),
+                        new Card(ARBITRARY_SUIT, "5"));
 
-    assertThat(game.handValueOf(hand))
+    Hand hand = new Hand(cards);
+
+
+    assertThat(hand.value())
         .isEqualTo(11 + 5);
   }
 
   @Test
   public void handWithOneAceAndOtherCardsEqualTo11IsValuedAt1() throws Exception {
-    Game game = new Game();
-    var hand = List.of(new Card(ARBITRARY_SUIT, "A"),
-                       new Card(ARBITRARY_SUIT, "8"),
-                       new Card(ARBITRARY_SUIT, "3"));
+    var cards = List.of(new Card(ARBITRARY_SUIT, "A"),
+                        new Card(ARBITRARY_SUIT, "8"),
+                        new Card(ARBITRARY_SUIT, "3"));
 
-    assertThat(game.handValueOf(hand))
+    Hand hand = new Hand(cards);
+
+    assertThat(hand.value())
         .isEqualTo(1 + 8 + 3);
   }
 
