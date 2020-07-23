@@ -46,4 +46,38 @@ public class BettingTest {
         .isEqualTo(115);
   }
 
+  @Test
+  public void playerLosesBetOf25DollarsResultsIn75DollarBalance() throws Exception {
+    Game game = new Game();
+    game.playerBets(25);
+
+    game.playerLoses();
+
+    assertThat(game.playerBalance())
+        .isEqualTo(75);
+  }
+
+  @Test
+  public void playerBets30DollarsAndPushesResultsIn100DollarBalance() throws Exception {
+    Game game = new Game();
+    game.playerBets(30);
+
+    game.playerPushes();
+
+    assertThat(game.playerBalance())
+        .isEqualTo(100);
+  }
+
+  @Test
+  public void playerBets50DollarsAndGetsBlackjackResultsIn175DollarBalance() throws Exception {
+    Game game = new Game();
+    game.playerBets(50);
+
+    game.playerGetsBlackjack();
+
+    assertThat(game.playerBalance())
+        .isEqualTo(100 + ((int) (50 * 1.5)));
+
+  }
+
 }
