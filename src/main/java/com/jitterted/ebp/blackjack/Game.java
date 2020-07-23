@@ -76,15 +76,11 @@ public class Game {
       System.out.println("Dealer went BUST, Player wins! Yay for you!! 💵");
     } else if (playerBeatsDealer()) {
       System.out.println("You beat the Dealer! 💵");
-    } else if (playerPushesWithDealer()) {
+    } else if (playerHand.pushesWith(dealerHand)) {
       System.out.println("Push: The house wins, you Lose. 💸");
     } else {
       System.out.println("You lost to the Dealer. 💸");
     }
-  }
-
-  private boolean playerPushesWithDealer() {
-    return playerHand.isTiedWith(dealerHand);
   }
 
   private boolean playerBeatsDealer() {

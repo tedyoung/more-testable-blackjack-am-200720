@@ -57,11 +57,11 @@ public class Hand {
     return value() > 21;
   }
 
-  boolean isTiedWith(Hand hand) {
-    return value() == hand.value();
-  }
-
   boolean beats(Hand dealerHand) {
     return value() > dealerHand.value();
+  }
+
+  boolean pushesWith(Hand hand) {
+    return value() == hand.value();
   }
 }
